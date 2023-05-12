@@ -39,7 +39,10 @@ class InstacjaKsiazki(models.Model):
         primary_key=True, default=uuid.uuid4, help_text="ID tej ksiazki")
     ksiazka = models.ForeignKey(
         'ksiazka', on_delete=models.SET_NULL, null=True)
-    wydawca = models.CharField(max_length=200)
+    wydawca = models.ForeignKey(
+        'wydawca', on_delete=models.SET_NULL, null=True)
+    bibliotekarz = models.ForeignKey(
+        'bibliotekarz', on_delete=models.SET_NULL, null=True)
     data_zwrotu = models.DateField(null=True, blank=True)
     wypozycza = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -72,6 +75,38 @@ class Autor(models.Model):
 
     def get_absolute_url(self):
         return reverse('autor-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return '{0}, {1}'.format(self.nazwisko, self.imie)
+
+
+class Wydawca(models.Model):
+    nazwa = models.CharField(max_length=200)
+    miasto = models.CharField(max_length=100)
+    data_zalozenia = models.DateField(null=True, blank=True)
+    krs = models.CharField(max_length=10, null=True, blank=True)
+
+    class Meta:
+        ordering = ["nazwa", "miasto"]
+
+    def get_absolute_url(self):
+        return reverse('wydawca-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return '{0}, {1}'.format(self.miasto, self.nazwa)
+
+
+class Bibliotekarz(models.Model):
+    imie = models.CharField(max_length=100)
+    nazwisko = models.CharField(max_length=100)
+    data_zatrudnienia = models.DateField(null=True, blank=True)
+    stanowisko = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        ordering = ["nazwisko", "imie"]
+
+    def get_absolute_url(self):
+        return reverse('bibliotekarz-detail', args=[str(self.id)])
 
     def __str__(self):
         return '{0}, {1}'.format(self.nazwisko, self.imie)
