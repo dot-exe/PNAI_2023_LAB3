@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Autor, Gatunek, Ksiazka, InstacjaKsiazki
+from .models import Autor, Gatunek, Ksiazka, InstacjaKsiazki, Wydawca, Bibliotekarz
 from django.views import generic
 # Create your views here.
 
@@ -9,6 +9,8 @@ def index(request):
     num_in = InstacjaKsiazki.objects.all().count()
     num_in_d = InstacjaKsiazki.objects.filter(status__exact='d').count()
     num_au = Autor.objects.count()
+    num_wyd = Wydawca.objects.count()
+    num_bib = Bibliotekarz.objects.count()
 
     return render(
         request,
@@ -17,7 +19,10 @@ def index(request):
             'num_ks': num_ks,
             'num_in': num_in,
             'num_in_d': num_in_d,
-            'num_au': num_au
+            'num_au': num_au,
+            'num_wyd': num_wyd,
+            'num_bib': num_bib
+
         }
     )
 
@@ -40,3 +45,29 @@ class KsiazkaListView(generic.ListView):
 class KsiazkaSzczegolView(generic.DetailView):
     model = Ksiazka
     template_name = 'ksiazka_detail.html'
+
+
+class WydawcaListView(generic.ListView):
+    model = Wydawca
+    context_object_name = 'wydawca_list'
+    queryset = Wydawca.objects.all()
+    template_name = 'wydawca_list.html'
+    paginate_by = 2
+
+
+class WydawcaSzczegolView(generic.DetailView):
+    model = Wydawca
+    template_name = 'wydawca_detail.html'
+
+
+class BibliotekarzListView(generic.ListView):
+    model = Bibliotekarz
+    context_object_name = 'bibliotekarz_list'
+    queryset = Bibliotekarz.objects.all()
+    template_name = 'bibliotekarz_list.html'
+    paginate_by = 1
+
+
+class BibliotekarzSzczegolView(generic.DetailView):
+    model = Bibliotekarz
+    template_name = 'bibliotekarz_detail.html'
