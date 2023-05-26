@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from .models import Autor, Gatunek, Ksiazka, InstacjaKsiazki, Wydawca, Bibliotekarz
+from .models import Autor, Gatunek, Ksiazka, InstancjaKsiazki, Wydawca, Bibliotekarz
 from django.views import generic
 # Create your views here.
 
 
 def index(request):
     num_ks = Ksiazka.objects.all().count()
-    num_in = InstacjaKsiazki.objects.all().count()
-    num_in_d = InstacjaKsiazki.objects.filter(status__exact='d').count()
+    num_in = InstancjaKsiazki.objects.all().count()
+    num_in_d = InstancjaKsiazki.objects.filter(status__exact='d').count()
     num_au = Autor.objects.count()
     num_wyd = Wydawca.objects.count()
     num_bib = Bibliotekarz.objects.count()
@@ -30,7 +30,7 @@ def index(request):
 class AutorListView(generic.ListView):
     model = Autor
     context_object_name = 'autor_list'
-    queryset = Autor.objects.filter(imie__icontains=' ')[:5]
+    queryset = Autor.objects.all()
     template_name = 'autor_list.html'
 
 
